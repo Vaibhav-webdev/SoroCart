@@ -12,7 +12,7 @@ app.use(express.json());
 connectDB();
 
 // routes
-app.use("/api/users", userRoutes);
+app.use("/api", userRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on localhost:${process.env.PORT}`);
