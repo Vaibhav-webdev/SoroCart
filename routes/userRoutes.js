@@ -56,7 +56,7 @@ router.get("/popular/:dynamic", async (req, res) => {
     const dynamic = req.params.dynamic;
     let products;
 
-    if (dynamic.toLowerCase() === "All") {
+    if (dynamic.toLowerCase() === "all") {
       products = await Product.find({ popular: true });
     } else {
       products = await Product.find({
