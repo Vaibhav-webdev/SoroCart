@@ -7,20 +7,39 @@ router.get("/store", async (req, res) => {
   try {
     const filters = {};
 
+    // Category filter
     if (req.query.category) {
       filters.category = req.query.category;
     }
 
-    if (req.query.brand) {
-      filters.brand = req.query.brand;
+    // Price range filter
+    if (req.query.minPrice || req.query.maxPrice) {
+      filters.price = {};
+      if (req.query.minPrice) {
+        filters.price.$gte = Number(req.query.minPrice);
+      }
+      if (req.query.maxPrice) {
+        filters.price.$lte = Number(req.query.maxPrice);
+      }
     }
 
-    if (req.query.price) {
-      filters.price = req.query.price;
+    let query = Product.find(filters);
+
+    // Sorting
+    if (req.query.sort) {
+      switch (req.query.sort) {
+        case "Price: Low to High":
+          query = query.sort({ price: 1 });
+          break;
+        case "Price: High to Low":
+          query = query.sort({ price: -1 });
+          break;
+        default:
+          break; // no sort
+      }
     }
 
-    const products = await Product.find(filters);
-
+    const products = await query;
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -33,14 +52,23 @@ router.get("/popular", async (req, res) => {
 });
 
 router.get("/popular/:dynamic", async (req, res) => {
-  const dynamic = req.params.dynamic;
+  try {
+    const dynamic = req.params.dynamic;
+    let products;
 
-  const products = await Product.find({
-    popular: true,
-    type: dynamic
-  });
+    if (dynamic.toLowerCase() === "All") {
+      products = await Product.find({ popular: true });
+    } else {
+      products = await Product.find({
+        popular: true,
+        category: dynamic, // case-insensitive match
+      });
+    }
 
-  res.json(products);
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 
