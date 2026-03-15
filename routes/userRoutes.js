@@ -9,6 +9,7 @@ router.get("/store", async (req, res) => {
 
     // Category filter
     if (req.query.category) {
+      if (re.query.category.toLowerCase() === "all") return
       filters.category = req.query.category;
     }
 
