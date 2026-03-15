@@ -9,9 +9,10 @@ router.get("/store", async (req, res) => {
 
     // Category filter
     if (req.query.category) {
-      if (re.query.category.toLowerCase() === "all") return
-      filters.category = req.query.category;
-    }
+  if (req.query.category.toLowerCase() === "all") return;
+  filters.category = req.query.category;
+}
+
 
     // Price range filter
     if (req.query.minPrice || req.query.maxPrice) {
