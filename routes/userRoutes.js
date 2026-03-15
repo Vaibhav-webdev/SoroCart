@@ -47,6 +47,21 @@ router.get("/store", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+  const search = req.query.search;
+
+  const products = await Product.find({
+    title: { $regex: search, $options: "i" }
+  });
+
+  res.json(products);
+
+} catch (err) {
+  res.status(500).json({ message: err.message });
+}
+});
+
 router.get("/popular", async (req, res) => {
   const products = await Product.find({ popular: true });
   res.json(products);
