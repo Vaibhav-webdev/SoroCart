@@ -1,7 +1,31 @@
 import express from "express";
 import Product from "../models/Product.js";
+import User from "../models/User.js"
 
 const router = express.Router();
+
+router.get("/create", async (req, res) => {
+  try {
+
+    const { email, name, avatar } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email required" });
+    }
+    user = new User({
+      email,
+      name,
+      avatar
+    });
+
+    await user.save();
+
+    res.json(user);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.get("/store", async (req, res) => {
   try {
