@@ -13,7 +13,6 @@ router.get("/store", async (req, res) => {
   filters.category = req.query.category;
 }
 
-
     // Price range filter
     if (req.query.minPrice || req.query.maxPrice) {
       filters.price = {};
