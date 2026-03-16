@@ -1,18 +1,21 @@
 import express from "express";
-import Product from "../models/Product.js";
-import User from "../models/User.js"
+import Product from "../models/Product"
+import User from "../models/User"
 
 const router = express.Router();
 
 router.get("/create", async (req, res) => {
   try {
 
-    const { email, name, avatar } = req.query;
+    const name = req.query.name;
+    const email = req.query.email;
+    const avatar = req.query.avatar;
 
     if (!email) {
       return res.status(400).json({ message: "Email required" });
     }
-    user = new User({
+
+    const user = new User({
       email,
       name,
       avatar
