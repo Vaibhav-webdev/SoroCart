@@ -4,6 +4,56 @@ import User from "../models/User"
 
 const router = express.Router();
 
+router.get("/api/wishlist", async (req, res) => {
+  try {
+    // query se email extract
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    // user find karo
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // wishlist send karo
+    res.status(200).json(user.wishlist);
+
+  } catch (error) {
+    console.error("Wishlist fetch error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/api/orders", async (req, res) => {
+  try {
+    // query se email extract
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    // user find karo
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // wishlist send karo
+    res.status(200).json(user.orders);
+
+  } catch (error) {
+    console.error("Wishlist fetch error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.get("/create", async (req, res) => {
   try {
 
