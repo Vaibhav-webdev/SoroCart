@@ -3,6 +3,7 @@ import User from "../models/User.js"
 import Product from "../models/Product.js"
 
 const router = express.Router();
+router.use(express.json());
 
 router.get("/api/wishlist", async (req, res) => {
   try {
@@ -54,26 +55,24 @@ router.get("/api/orders", async (req, res) => {
   }
 });
 
-router.get("/create", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
-
-    const name = req.query.name;
-    const email = req.query.email;
-    const avatar = req.query.avatar;
+    const { name, email, avatar } = req.body; // read from POST body
 
     if (!email) {
       return res.status(400).json({ message: "Email required" });
     }
 
+    // Create a new user using your existing User schema
     const user = new User({
       email,
       name,
       avatar
     });
 
-    await user.save();
+    await user.save(); // Save to database
 
-    res.json(user);
+    res.json(user); // Send back the saved user
 
   } catch (err) {
     res.status(500).json({ message: err.message });
