@@ -3,7 +3,6 @@ import User from "../models/User.js"
 import Product from "../models/Product.js"
 
 const router = express.Router();
-router.use(express.json());
 
 router.get("/api/wishlist", async (req, res) => {
   try {

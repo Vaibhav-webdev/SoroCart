@@ -15,32 +15,39 @@ const userSchema = new mongoose.Schema(
 
   avatar: {
     type: String,
+    default: "",  // ✅ default add kiya
   },
 
   // Wishlist Products
-  wishlist: [
-    {
-      title: String,
-      price: Number,
-      rating: Number,
-      image: String,
-      category: String,
-      popular: Boolean,
-    }
-  ],
+  wishlist: {
+    type: [
+      {
+        title: String,
+        price: Number,
+        rating: Number,
+        image: String,
+        category: String,
+        popular: Boolean,
+      }
+    ],
+    default: []  // ✅ default empty array
+  },
 
   // Orders
-  orders: [
-    {
-      id: String,
-      date: String,
-      status: String,
-      product: String,
-      items: Number,
-      total: Number,
-      image: String
-    }
-  ]
+  orders: {
+    type: [
+      {
+        id: String,
+        date: String,
+        status: String,
+        product: String,
+        items: Number,
+        total: Number,
+        image: String
+      }
+    ],
+    default: []  // ✅ default empty array
+  }
 
 },
 {
