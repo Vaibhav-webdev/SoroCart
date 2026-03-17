@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema({
   image: String,
   category: String,
   popular: Boolean,
+  desc: String,
 });
 
 const Product = mongoose.model("Product", productSchema);
