@@ -4,7 +4,7 @@ import Product from "../models/Product.js"
 
 const router = express.Router();
 
-router.get("/api/wishlist", async (req, res) => {
+router.get("/wishlist", async (req, res) => {
   try {
     // query se email extract
     const { email } = req.query;
@@ -29,7 +29,50 @@ router.get("/api/wishlist", async (req, res) => {
   }
 });
 
-router.get("/api/orders", async (req, res) => {
+router.post("/wishlist/add", async (req, res) => {
+  try {
+    const { email, product } = req.body;
+
+    const user = await User.findOneAndUpdate(
+      { email },
+      {
+        $push: {
+          wishlist: {
+            title: product.title,
+            price: product.price,
+            rating: product.rating,
+            image: product.image,
+            category: product.category,
+            popular: product.popular,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product added to wishlist",
+      wishlist: user.wishlist,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+});
+
+router.get("/orders", async (req, res) => {
   try {
     // query se email extract
     const { email } = req.query;
