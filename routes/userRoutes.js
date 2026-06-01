@@ -36,7 +36,7 @@ router.post("/wishlist/add", async (req, res) => {
     const user = await User.findOneAndUpdate(
       { email },
       {
-        $push: {
+        $addToSet: {
           wishlist: {
             title: product.title,
             price: product.price,
@@ -63,8 +63,6 @@ router.post("/wishlist/add", async (req, res) => {
       wishlist: user.wishlist,
     });
   } catch (error) {
-    console.error(error);
-
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -127,9 +125,9 @@ router.get("/store", async (req, res) => {
 
     // Category filter
     if (req.query.category) {
-  if (req.query.category.toLowerCase() === "all") return;
-  filters.category = req.query.category;
-}
+      if (req.query.category.toLowerCase() === "all") return;
+      filters.category = req.query.category;
+    }
 
     // Price range filter
     if (req.query.minPrice || req.query.maxPrice) {
@@ -167,17 +165,17 @@ router.get("/store", async (req, res) => {
 
 router.get("/search", async (req, res) => {
   try {
-  const search = req.query.search;
+    const search = req.query.search;
 
-  const products = await Product.find({
-    title: { $regex: search, $options: "i" }
-  });
+    const products = await Product.find({
+      title: { $regex: search, $options: "i" }
+    });
 
-  res.json(products);
+    res.json(products);
 
-} catch (err) {
-  res.status(500).json({ message: err.message });
-}
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 router.get("/popular", async (req, res) => {
