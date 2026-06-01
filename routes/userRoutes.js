@@ -95,6 +95,49 @@ router.get("/orders", async (req, res) => {
   }
 });
 
+router.post("/orders/add", async (req, res) => {
+  try {
+
+    const { email, product } = req.body;
+
+    if (!email || !product) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and product are required"
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    // Order array me push karo
+    user.orders.push(product);
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Order added successfully",
+      orders: user.orders
+    });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      success: false,
+      message: "Server Error"
+    });
+
+  }
+});
+
+
 router.post("/create", async (req, res) => {
   try {
     const { name, email, avatar } = req.body; // read from POST body
